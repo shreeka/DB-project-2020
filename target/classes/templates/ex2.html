@@ -1,0 +1,169 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+
+    <title>DB Project</title>
+    <style>
+        .table td.fit,
+        .table th.fit {
+            white-space: nowrap;
+            width: 1%;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="d-flex">
+        <a th:href="@{'/'}">Return to home</a>
+    </div>
+    <h4 class="mb-4 mt-2">Task 2A</h4>
+    <table class="table mb-4 mt-2 table-md">
+        <thead>
+        <tr>
+            <th scope="col">nickname</th>
+            <th scope="col">address</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${A}">
+            <td th:text="${row.nickname}"></td>
+            <td th:text="${row.address}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mt-2 mb-4">Task 2B</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">user_type</th>
+            <th scope="col">count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${B}">
+            <td th:text="${row.user_type}"></td>
+            <td th:text="${row.count}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2C</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">firstletter</th>
+            <th scope="col">frequency</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${C}">
+            <td th:text="${row.firstletter}"></td>
+            <td th:text="${row.frequency}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2D</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">nickname</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${D}">
+            <td th:text="${row.nickname}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2E</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">nickname</th>
+            <th scope="col">month_birth</th>
+            <th scope="col">day_birth</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${E}">
+            <td th:text="${row.nickname}"></td>
+            <td th:text="${row.month_birth}"></td>
+            <td th:text="${row.day_birth}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2F</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">address</th>
+            <th scope="col">dense_rank</th>
+            <th scope="col">avg_response_time</th>
+            <th scope="col">username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${F}">
+            <td th:text="${row.address}"></td>
+            <td th:text="${row.dense_rank}"></td>
+            <td th:text="${row.avg_response_time}"></td>
+            <td th:text="${row.username}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2G</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">address</th>
+            <th scope="col">rank</th>
+            <th scope="col">avg_response_time</th>
+            <th scope="col">username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${G}">
+            <td th:text="${row.address}"></td>
+            <td th:text="${row.rank}"></td>
+            <td th:text="${row.avg_response_time}"></td>
+            <td th:text="${row.username}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h4 class="mb-4">Task 2H</h4>
+    <table class="table mb-4">
+        <thead>
+        <tr>
+            <th scope="col">thread_id</th>
+            <th scope="col">email_id</th>
+            <th scope="col">username</th>
+            <th scope="col">in_reply_to</th>
+            <th scope="col">depth</th>
+            <th scope="col">date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${H}">
+            <td th:text="${row.thread_id}"></td>
+            <td th:text="${row.email_id}"></td>
+            <td th:text="${row.username}"></td>
+            <td th:text="${row.in_reply_to}"></td>
+            <td th:text="${row.depth}"></td>
+            <td th:text="${row.date}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+<script src="/js/main.js"></script>
+</html>

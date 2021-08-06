@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+
+    <title>DB Project</title>
+    <style>
+        .table td.fit,
+        .table th.fit {
+            white-space: nowrap;
+            width: 1%;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="d-flex">
+        <a class="mr-2" th:href="@{'/worksheet2/ex1/'}">Return to form</a>
+        <a th:href="@{'/'}">Return to home</a>
+    </div>
+    <h4 class="mt-3">Account view </h4>
+    <table class="table mb-4 mt-2 table-md">
+        <thead>
+        <tr>
+            <th scope="col">trader</th>
+            <th scope="col">stock</th>
+            <th scope="col">amount</th>
+            <th scope="col">call_amount</th>
+            <th scope="col">call_limit</th>
+            <th scope="col">put_amount</th>
+            <th scope="col">put_limit</th>
+            <th scope="col">market_price</th>
+            <th scope="col">market_value</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${Account_v}">
+            <td th:text="${row.trader}"></td>
+            <td th:text="${row.stock}"></td>
+            <td th:text="${row.amount}"></td>
+            <td th:text="${row.call_amount}"></td>
+            <td th:text="${row.call_limit}"></td>
+            <td th:text="${row.put_amount}"></td>
+            <td th:text="${row.put_limit}"></td>
+            <td th:text="${row.market_price}"></td>
+            <td th:text="${row.market_value}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h4 class="mt-3">Order view</h4>
+    <table class="table mb-4 mt-2 table-md">
+        <thead>
+        <tr>
+            <th scope="col">stock</th>
+            <th scope="col">call_volume</th>
+            <th scope="col">call_backlog</th>
+            <th scope="col">price</th>
+            <th scope="col">put_backlog</th>
+            <th scope="col">put_volume</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${Orders_v}">
+            <td th:text="${row.stock}"></td>
+            <td th:text="${row.call_volume}"></td>
+            <td th:text="${row.call_backlog}"></td>
+            <td th:text="${row.price}"></td>
+            <td th:text="${row.put_backlog}"></td>
+            <td th:text="${row.put_volume}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+
+    <title>DB Project</title>
+    <style>
+        .table td.fit,
+        .table th.fit {
+            white-space: nowrap;
+            width: 1%;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="d-flex">
+        <a class="mr-2" th:href="@{'/worksheet4/ex4/'}">Return to form</a>
+        <a th:href="@{'/'}">Return to home</a>
+    </div>
+    <h4 class="mt-3">Most Popular Pickup Locations</h4>
+    <table class="table mb-4 mt-2 table-md">
+        <thead>
+        <tr>
+            <th scope="col">no_rides</th>
+            <th scope="col">borough</th>
+            <th scope="col">zone</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${query_result}">
+            <td th:text="${row.no_rides}"></td>
+            <td th:text="${row.borough}"></td>
+            <td th:text="${row.zone}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

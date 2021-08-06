@@ -1,0 +1,29 @@
+title.basics.tsv rejected tuples: 0
+title.basics.tsv execution time:629.1364967823029
+title.basics.tsv memory usage: 46988
+
+title.ratings.tsv rejected tuples: 0
+title.ratings.tsv execution time:153.92921352386475
+title.ratings.tsv memory usage: 47300
+
+title.akas.tsv rejected tuples: 5195
+title.akas.tsv execution time:834.0141606330872
+title.akas.tsv memory usage: 27600
+
+title.akas.tsv execution time:526.2437543869019
+title.akas.tsv memory usage: 27080
+
+name.basics.tsv rejected tuples: 0
+name.basics.tsv execution time:177.84092831611633
+name.basics.tsv memory usage: 27088
+
+name.basics.tsv execution time:291.3973469734192
+name.basics.tsv memory usage: 27576
+title.principals.tsv rejected tuples: 24322
+title.principals.tsv execution time:702.4831259250641
+title.principals.tsv memory usage: 42467328 
+
+IMDB_movie_details.json execution time:2.8641107082366943
+IMDB_movie_details.json memory usage: 83890176 
+
+

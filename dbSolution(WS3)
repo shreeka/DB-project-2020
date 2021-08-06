@@ -1,0 +1,286 @@
+CREATE TABLE movie_titles (
+	id varchar PRIMARY KEY NOT NULL,
+	title_type varchar NOT NULL,
+	title_name varchar NOT NULL,
+	original_title varchar,
+	adult_movie integer  NOT NULL
+);
+
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY NOT NULL,
+	username varchar NOT NULL,
+	roles varchar NOT NULL,
+	password varchar NOT NULL ,
+	address varchar NOT NULL UNIQUE,
+	last_login varchar NOT NULL
+);
+
+CREATE TABLE application_logs (
+	id SERIAL PRIMARY KEY NOT NULL,
+	search_type varchar,
+	time varchar NOT NULL,
+	query_run_time bigint,
+	query varchar,
+	username varchar,
+	search_keyword varchar,
+	empty_result boolean,
+	error_id varchar,
+	error_description varchar
+);
+
+CREATE TABLE release_information (
+	title_id varchar NOT NULL REFERENCES movie_titles(id),
+	release_year integer,
+	end_year integer,
+	run_time integer
+);
+
+CREATE TABLE genre (
+	title_id varchar NOT NULL REFERENCES movie_titles(id),
+	genre varchar NOT NULL
+);
+
+CREATE TABLE alias_title (
+	title_id varchar NOT NULL REFERENCES movie_titles(id),
+	ordering INTEGER NOT NULL,
+	alias_title varchar NOT NULL,
+	is_original integer
+    UNIQUE(title_id,ordering)
+);
+
+CREATE TABLE region (
+	movie_id varchar NOT NULL REFERENCES movie_titles(id),
+	ordering integer NOT NULL,
+	region varchar NOT NULL
+);
+
+CREATE TABLE error
+(
+    id varchar NOT NULL,
+    error_code varchar NOT NULL,
+    diagnostic_info varchar NOT NULL,
+    CONSTRAINT error_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE language (
+	movie_id varchar NOT NULL REFERENCES movie_titles(id),
+	ordering integer NOT NULL,
+	language varchar NOT NULL
+);
+
+CREATE TABLE attributes (
+	movie_id varchar NOT NULL REFERENCES movie_titles(id),
+	ordering integer NOT NULL,
+	attributes varchar
+);
+
+CREATE TABLE movie_type (
+	movie_id varchar NOT NULL REFERENCES movie_titles(id),
+	ordering integer NOT NULL,
+	type varchar
+);
+
+CREATE TABLE person (
+	id varchar PRIMARY KEY NOT NULL,
+	name varchar NOT NULL,
+	birth_year integer,
+	death_year integer
+);
+
+CREATE TABLE profession (
+	id varchar NOT NULL REFERENCES person(id),
+	profession varchar NOT NULL
+);
+
+CREATE TABLE popular_actor_titles (
+	person_id varchar NOT NULL REFERENCES person(id),
+	movie_title varchar
+);
+
+CREATE TABLE credits (
+	movie_title varchar NOT NULL REFERENCES movie_titles(id),
+	ordering INTEGER NOT NULL,
+	person_id varchar NOT NULL REFERENCES person(id),
+	category varchar NOT NULL,
+	job varchar,
+	character varchar
+);
+
+CREATE TABLE movie_plots (
+	movie_title varchar NOT NULL REFERENCES movie_titles(movie_id),
+	plot_summary varchar NOT NULL,
+	plot_synopsis varchar NOT NULL
+);
+
+CREATE TABLE ratings (
+	movie_title varchar NOT NULL REFERENCES movie_titles(id),
+	average_rating float8 NOT NULL,
+	no_votes integer NOT NULL
+);
+
+COPY trip_records_green FROM '/Users/i521529/Downloads/green_tripdata_2019-11.csv' (FORMAT CSV, DELIMITER E',', HEADER true, QUOTE E'\b')
+COPY taxi_zones FROM '/Users/i521529/Downloads/taxi+_zone_lookup.csv' (FORMAT CSV, DELIMITER E',', HEADER true, QUOTE E'"')
+
+create table trip_records_green (
+	vendorID int,
+	lpep_pickup_datetime date,
+	lpep_dropoff_datetime date,
+	store_and_fwd_flag char,
+	rate_code_id int,
+	pu_location_id float,
+	do_location_id float,
+	passenger_count int,
+	trip_distance float,
+	fare_amount float,
+	extra float,
+	mta_tax float,
+	tip_amount float,
+	tolls_amount float,
+	ehail_fee float,
+	improvement_surchage float,
+	total_amount float,
+	payment_type int,
+	trip_type varchar,
+	congestion_surchage float
+)
+
+create table vfh_license (
+	id varchar primary key,
+	name varchar
+)
+
+create table hvfhs_rides (
+	hvfhs_license_num varchar,
+	dispatching_base_num varchar,
+	pickup_datetime date,
+	dropoff_datetime date,
+	PULocationID int,
+	DOLocationID int,
+	SR_Flag int
+)
+
+CREATE INDEX idx_movie_name
+ON movie_titles(title_name);
+
+CREATE INDEX idx_movie_alias_name
+ON alias_title(alias_title);
+
+CREATE INDEX idx_credit_name
+ON person(name);
+
+CREATE INDEX idx_genre_name
+ON genre(genre);
+
+CREATE INDEX idx_movie_plots_name
+ON movie_plots(plot_summary);
+
+
+--- where most rides start --
+select count(*) as no_rides, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.pu_location_id
+group by
+GROUPING SETS (
+(borough, zone),
+ (borough)
+)
+order by no_rides desc
+
+--- where most rides end --
+select count(*) as no_rides, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.do_location_id
+group by
+GROUPING SETS (
+(borough, zone),
+ (borough)
+)
+order by no_rides desc
+
+-- popular payment methods --
+select popular_payment, payment_method, RANK() OVER(ORDER BY popular_payment desc)
+from (
+select count(*) as popular_payment, p.payment_method
+from trip_records_green g
+inner join payment_methods p
+on p.id = g.payment_type
+group by p.payment_method
+order by popular_payment desc
+) q
+
+-- average price for a ride to a particular location --
+select CAST(AVG(total_amount) AS DECIMAL(10,2)) as average_trip_ammount, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.do_location_id
+group by
+GROUPING SETS (
+(borough, zone),
+ (borough)
+)
+order by average_trip_ammount desc
+
+-- most congested areas --
+select borough, zone, RANK() OVER(ORDER BY congestion desc)
+from (
+select SUM(congestion_surchage) as congestion, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.do_location_id
+group by
+GROUPING SETS (
+(borough, zone),
+ (borough)
+)
+) q
+
+-- most popular day of the week trips --
+select to_char(lpep_pickup_datetime, 'Day') as day_of_the_week, count(*) as no_trips
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.pu_location_id
+group by
+day_of_the_week
+order by no_trips desc
+
+-- average tip amount by location --
+select CAST(AVG(tip_amount) AS DECIMAL(10,2)) as tip_amount, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.do_location_id
+group by borough, zone
+order by tip_amount desc
+
+-- number of rides per car service --
+select count(*) as no_rides,name
+from hvfhs_rides r
+inner join vfh_license v
+on r.hvfhs_license_num = v.id
+group by name
+order by no_rides desc
+
+-- average toll amount per location --
+select CAST(AVG(tolls_amount) AS DECIMAL(10,2)) as average_toll_ammount, borough, zone
+from trip_records_green g
+inner join taxi_zones t
+on t.location_id = g.do_location_id
+group by
+GROUPING SETS (
+(borough, zone),
+ (borough)
+)
+order by average_toll_ammount desc
+
+-- most popular ride sharing for hvfh services --
+select count(*) as no_rides,name
+from hvfhs_rides r
+inner join vfh_license v
+on r.hvfhs_license_num = v.id
+where SR_Flag = 1
+group by name
+order by no_rides desc
+
+--To use similarity
+CREATE EXTENSION pg_trgm;
