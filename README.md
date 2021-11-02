@@ -1,3 +1,3 @@
-# db-project-2020
+# db-schema-project
 
 A web-based DB application created using SpringBoot Java, Postgresql and Python.
